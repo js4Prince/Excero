@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 5050;
+const PORT = 8001;
 const dbConnection = require("./dbconfig/connectDb");
 const dbUrl = process.env.DBURL;
 const routes = require("./Routes/routes");
@@ -19,19 +19,27 @@ app.get("/", (req, resp) => {
 
 app.use("/api", routes);
 
-if(cluster.isPrimary){
-  for(let i = 0; i<os.cpus().length; i++){
-    cluster.fork()
+// if(cluster.isPrimary){
+//   for(let i = 0; i<os.cpus().length; i++){
+//     cluster.fork()
    
-  }
-  cluster.on('exit',(worker,code,signal)=>{
-    console.log(`worker ${worker.process.pid} killed`);
-    cluster.fork()
-  })
-}else{
+//   }
+//   cluster.on('exit',(worker,code,signal)=>{
+//     console.log(`worker ${worker.process.pid} killed`);
+//     cluster.fork()
+//   })
+// }else{
+//   app.listen(PORT, (err) => {
+//     if (err) {
+//       console.log("Server error");
+//     } else {
+//       console.log("Listning on port " + PORT + " on pid "+process.pid);}
+//   });}
+
+
+
   app.listen(PORT, (err) => {
     if (err) {
-      console.log("Server error");
+      console.log("Server error occured");
     } else {
-      console.log("Listning on port " + PORT + " on pid "+process.pid);}
-  });}
+      console.log("Listning on port " + PORT + " on pid "+process.pid);}})
